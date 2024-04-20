@@ -1,0 +1,24 @@
+export interface checkboxesInitialState {
+  0: boolean;
+  1: boolean;
+  2: boolean;
+  3: boolean;
+}
+
+// export interface checkboxesInitialState {
+
+// }
+
+export interface Ticket {
+  origin: string;
+  origin_name: string;
+  destination: string;
+  destination_name: string;
+  departure_date: string;
+  departure_time: string;
+  arrival_date: string;
+  arrival_time: string;
+  carrier: string;
+  stops: number;
+  price: number;
+}
