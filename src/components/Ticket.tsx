@@ -4,17 +4,20 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
+import { format, parse } from "date-fns";
+import { ru } from "date-fns/locale";
+import { useMemo } from "react";
 
 import plane from "../assets/airplane.png";
 import ta from "../assets/ta_logo.png";
-import { Ticket } from "../types";
+import { TicketType } from "../types";
 
-interface ICards {
-  ticket: Ticket;
+type TicketProps = {
+  ticket: TicketType;
   currency: string;
-}
+};
 
-const Cards = ({ ticket, currency }: ICards) => {
+const Ticket = ({ ticket, currency }: TicketProps) => {
   const {
     arrival_date,
     arrival_time,
@@ -28,8 +31,23 @@ const Cards = ({ ticket, currency }: ICards) => {
     stops,
   } = ticket;
 
+  //get from external api
+  const UsdExchange = 93;
+  const EurExchange = 100;
+
+  const rub = new Intl.NumberFormat("ru-RU").format(price);
+  const convertDate = useMemo(
+    () => (date: string) => {
+      const parsedDepDate = parse(date, "dd.MM.yy", new Date());
+      return format(parsedDepDate, "dd MMMM yyyy, EEE", {
+        locale: ru,
+      });
+    },
+    []
+  );
+
   return (
-    <Card sx={{ minWidth: 275, padding: 2 }}>
+    <Card sx={{ minWidth: 275, padding: 3 }}>
       <Grid container spacing={2}>
         <Grid
           xs={4}
@@ -46,10 +64,10 @@ const Cards = ({ ticket, currency }: ICards) => {
                 {" "}
                 за{" "}
                 {currency === "RUB"
-                  ? price
+                  ? rub
                   : currency === "USD"
-                  ? Math.floor(price / 92)
-                  : price / 100}{" "}
+                  ? Math.floor(price / UsdExchange)
+                  : price / EurExchange}{" "}
                 {currency === "RUB" ? (
                   <div> &#8381;</div>
                 ) : currency === "USD" ? (
@@ -65,30 +83,37 @@ const Cards = ({ ticket, currency }: ICards) => {
           <Divider orientation='vertical'></Divider>
         </Grid>
         <Grid xs={7}>
-          <Grid container spacing={2} display='flex' justifyContent='center'>
+          <Grid
+            container
+            spacing={2}
+            display='flex'
+            justifyContent='space-between'
+          >
             <Grid xs={3}>
-              <Stack spacing={1}>
+              <Stack spacing={1} textAlign={"left"}>
                 <Typography variant='h4' color='text.secondary' gutterBottom>
                   {departure_time}
                 </Typography>
-                <Typography
-                  sx={{ fontSize: 14, fontWeight: "bold" }}
-                  color='text.secondary'
-                  gutterBottom
-                >
-                  {origin}, {origin_name}
-                </Typography>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color='text.secondary'
-                  gutterBottom
-                >
-                  {departure_date}
-                </Typography>
+                <Stack spacing={0.1}>
+                  <Typography
+                    sx={{ fontSize: 14, fontWeight: "bold" }}
+                    color='text.secondary'
+                    gutterBottom
+                  >
+                    {origin}, {origin_name}
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: 12 }}
+                    color='text.secondary'
+                    gutterBottom
+                  >
+                    {convertDate(departure_date)}
+                  </Typography>
+                </Stack>
               </Stack>
             </Grid>
             <Grid xs={3}>
-              <Stack spacing={0.1}>
+              <Stack spacing={0.1} textAlign={"center"}>
                 <Typography variant='body2' color='text.secondary' gutterBottom>
                   {!stops
                     ? "прямой"
@@ -110,24 +135,26 @@ const Cards = ({ ticket, currency }: ICards) => {
               </Stack>
             </Grid>
             <Grid xs={3}>
-              <Stack spacing={1}>
+              <Stack spacing={1} textAlign={"right"}>
                 <Typography variant='h4' color='text.secondary' gutterBottom>
                   {arrival_time}
                 </Typography>
-                <Typography
-                  sx={{ fontSize: 14, fontWeight: "bold" }}
-                  color='text.secondary'
-                  gutterBottom
-                >
-                  {destination_name}, {destination}
-                </Typography>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color='text.secondary'
-                  gutterBottom
-                >
-                  {arrival_date}
-                </Typography>
+                <Stack spacing={0.1}>
+                  <Typography
+                    sx={{ fontSize: 14, fontWeight: "bold" }}
+                    color='text.secondary'
+                    gutterBottom
+                  >
+                    {destination_name}, {destination}
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: 12 }}
+                    color='text.secondary'
+                    gutterBottom
+                  >
+                    {convertDate(arrival_date)}
+                  </Typography>
+                </Stack>
               </Stack>
             </Grid>
           </Grid>
@@ -137,4 +164,4 @@ const Cards = ({ ticket, currency }: ICards) => {
   );
 };
 
-export default Cards;
+export default Ticket;

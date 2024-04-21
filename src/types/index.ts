@@ -1,15 +1,6 @@
-export interface checkboxesInitialState {
-  0: boolean;
-  1: boolean;
-  2: boolean;
-  3: boolean;
-}
+export type CheckboxState = Record<string, boolean>;
 
-// export interface checkboxesInitialState {
-
-// }
-
-export interface Ticket {
+export type TicketType = {
   origin: string;
   origin_name: string;
   destination: string;
@@ -21,4 +12,4 @@ export interface Ticket {
   carrier: string;
   stops: number;
   price: number;
-}
+};
