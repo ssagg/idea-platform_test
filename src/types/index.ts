@@ -1,4 +1,4 @@
-export type CheckboxState = Record<string, boolean>;
+export type FiltersCheckboxState = Record<string, boolean>;
 
 export type TicketType = {
   origin: string;

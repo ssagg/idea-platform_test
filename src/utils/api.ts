@@ -1,7 +1,7 @@
 import data from "../tickets.json";
-import { CheckboxState, TicketType } from "../types";
+import { FiltersCheckboxState, TicketType } from "../types";
 
-export const api = (filters: Partial<CheckboxState>) => {
+export const api = (filters: Partial<FiltersCheckboxState>) => {
   const checkedFilters = Object.keys(filters).filter(
     (key) => filters[key] === true
   );

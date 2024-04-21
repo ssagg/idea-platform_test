@@ -5,17 +5,18 @@ import React, { useMemo, useState } from "react";
 
 import Filters from "./components/Filters";
 import TicketsList from "./components/TicketsList";
-import { CheckboxState } from "./types";
+import { FiltersCheckboxState } from "./types";
 import { api } from "./utils/api";
 
 function App() {
   const [currency, setCurrency] = useState<string>("RUB");
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState<CheckboxState>({
-    "0": false,
-    "1": false,
-    "2": false,
-    "3": false,
-  });
+  const [selectedCheckboxes, setSelectedCheckboxes] =
+    useState<FiltersCheckboxState>({
+      "0": false,
+      "1": false,
+      "2": false,
+      "3": false,
+    });
 
   const MemoTicketsList = React.memo(TicketsList);
   const MemoFilters = React.memo(Filters);

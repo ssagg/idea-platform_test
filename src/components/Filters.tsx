@@ -2,15 +2,15 @@ import { Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import React, { Dispatch } from "react";
 
-import { CheckboxState } from "../types";
+import { FiltersCheckboxState } from "../types";
 import Checkboxes from "./Checkboxes";
 import Slider from "./Slider";
 
 export type FiltersProps = {
   currency: string;
   setCurrency: Dispatch<string>;
-  selectedCheckboxes: CheckboxState;
-  setSelectedCheckboxes: Dispatch<CheckboxState>;
+  selectedCheckboxes: FiltersCheckboxState;
+  setSelectedCheckboxes: Dispatch<FiltersCheckboxState>;
   handleCurrency?: (
     event: React.MouseEvent<HTMLElement>,
     newCurrency: string
@@ -24,7 +24,7 @@ const Filters = ({
   setSelectedCheckboxes,
 }: FiltersProps) => {
   const handleCurrency = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newCurrency: string
   ) => {
     setCurrency(newCurrency);
