@@ -1,7 +1,7 @@
 {
   "name": "idea-platform",
   "private": true,
-  "homepage": "https://ssagg.github.io/idea-platform_test/",
+  "homepage": "https://ssagg.github.io/idea-platform_test",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
