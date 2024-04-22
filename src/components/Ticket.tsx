@@ -1,23 +1,22 @@
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Card, Divider, Stack, Typography } from "@mui/material";
+
 import Grid from "@mui/material/Unstable_Grid2";
 import { format, parse } from "date-fns";
 import { ru } from "date-fns/locale";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 
 import plane from "../assets/airplane.png";
 import ta from "../assets/ta_logo.png";
 import { TicketType } from "../types";
+import { getPriceLabel, selectStops } from "../utils/utils";
+import { CurrencyContext } from "../context/context";
 
 type TicketProps = {
   ticket: TicketType;
-  currency: string;
 };
 
-const Ticket = ({ ticket, currency }: TicketProps) => {
+const Ticket = ({ ticket }: TicketProps) => {
+  const currency = useContext(CurrencyContext);
   const {
     arrival_date,
     arrival_time,
@@ -31,11 +30,6 @@ const Ticket = ({ ticket, currency }: TicketProps) => {
     stops,
   } = ticket;
 
-  //get from external api
-  const UsdExchange = 93;
-  const EurExchange = 100;
-
-  const rub = new Intl.NumberFormat("ru-RU").format(price);
   const convertDate = useMemo(
     () => (date: string) => {
       const parsedDepDate = parse(date, "dd.MM.yy", new Date());
@@ -48,7 +42,7 @@ const Ticket = ({ ticket, currency }: TicketProps) => {
 
   return (
     <Card sx={{ minWidth: 275, padding: 3 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} justifyContent='space-evenly'>
         <Grid
           xs={4}
           display='flex'
@@ -58,28 +52,22 @@ const Ticket = ({ ticket, currency }: TicketProps) => {
         >
           <img src={ta} width={150} />
           <Button variant='contained' color='warning' sx={{ minWidth: 200 }}>
-            <div>
-              Купить{" "}
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                {" "}
-                за{" "}
-                {currency === "RUB"
-                  ? rub
-                  : currency === "USD"
-                  ? Math.floor(price / UsdExchange)
-                  : price / EurExchange}{" "}
+            <Box>
+              Купить
+              <Box display='flex' flexDirection='row'>
+                за {getPriceLabel(currency, price)}
                 {currency === "RUB" ? (
-                  <div> &#8381;</div>
+                  <Box> &#8381;</Box>
                 ) : currency === "USD" ? (
-                  <div> &#36;</div>
+                  <Box> &#36;</Box>
                 ) : (
-                  <div> &euro;</div>
+                  <Box> &euro;</Box>
                 )}
-              </div>
-            </div>
+              </Box>
+            </Box>
           </Button>
         </Grid>
-        <Grid xs={1} display='flex'>
+        <Grid xs={0.5} display='flex'>
           <Divider orientation='vertical'></Divider>
         </Grid>
         <Grid xs={7}>
@@ -113,23 +101,22 @@ const Ticket = ({ ticket, currency }: TicketProps) => {
               </Stack>
             </Grid>
             <Grid xs={3}>
-              <Stack spacing={0.1} textAlign={"center"}>
+              <Stack spacing={0.5} textAlign={"center"}>
                 <Typography variant='body2' color='text.secondary' gutterBottom>
-                  {!stops
-                    ? "прямой"
-                    : stops === 1
-                    ? `${stops} пересадка`
-                    : `${stops} пересадки`}
+                  {selectStops(stops)}
                 </Typography>
                 <Stack
+                  direction='row'
                   color='text.secondary'
                   width={100}
-                  display='flex'
-                  justifyContent='space-between'
-                  flexDirection='row'
+                  spacing={1}
                   alignItems='center'
                 >
-                  <hr style={{ width: 80 }}></hr>
+                  <Divider
+                    orientation='horizontal'
+                    style={{ width: 80 }}
+                  ></Divider>
+
                   <img src={plane} width={14} style={{ rotate: "45deg" }} />
                 </Stack>
               </Stack>

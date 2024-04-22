@@ -1,20 +1,16 @@
-import { Card, Typography } from "@mui/material";
-import Stack from "@mui/material/Stack";
+import { Card, Typography, Stack } from "@mui/material";
 
 import { TicketType } from "../types";
 import TicketCard from "./Ticket";
 
 type TicketsProps = {
-  currency: string;
   data: TicketType[];
 };
-const TicketsList = ({ currency, data }: TicketsProps) => {
+const TicketsList = ({ data }: TicketsProps) => {
   return (
     <Stack spacing={2}>
       {data.length ? (
-        data.map((ticket, index) => (
-          <TicketCard key={index} ticket={ticket} currency={currency} />
-        ))
+        data.map((ticket, index) => <TicketCard key={index} ticket={ticket} />)
       ) : (
         <Card style={{ minWidth: 275 }}>
           <Typography>Нет билетов</Typography>

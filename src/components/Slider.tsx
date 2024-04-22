@@ -1,23 +1,23 @@
-import {
-  Button,
-  FormControl,
-  FormGroup,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 
 import { FiltersProps } from "./Filters";
+import { useContext } from "react";
+import { CurrencyContext } from "../context/context";
 
-type SliderProps = Pick<FiltersProps, "currency" | "setSelectedCheckboxes" | 'handleCurrency'>;
+type SliderProps = Pick<FiltersProps, "setCurrency">;
 
-const Slider = ({
-  currency,
-  handleCurrency,
-  setSelectedCheckboxes,
-}: SliderProps) => {
+const Slider = ({ setCurrency }: SliderProps) => {
+  const currency = useContext(CurrencyContext);
+
+  const handleCurrency = (
+    _event: React.MouseEvent<HTMLElement>,
+    newCurrency: "RUB" | "USD" | "EUR"
+  ) => {
+    setCurrency(newCurrency);
+  };
   return (
     <>
-      <h3>ВАЛЮТА</h3>
+      <Typography variant='h6'>ВАЛЮТА</Typography>
       <ToggleButtonGroup
         color='primary'
         value={currency}
@@ -35,23 +35,7 @@ const Slider = ({
           EUR
         </ToggleButton>
       </ToggleButtonGroup>
-      <h3>КОЛИЧЕСТВО ПЕРЕСАДОК</h3>
-      <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
-        <FormGroup>
-          <Button
-            onClick={() =>
-              setSelectedCheckboxes({
-                "0": false,
-                "1": false,
-                "2": false,
-                "3": false,
-              })
-            }
-          >
-            Сбросить
-          </Button>
-        </FormGroup>
-      </FormControl>
+      <Typography variant='h6'>КОЛИЧЕСТВО ПЕРЕСАДОК</Typography>
     </>
   );
 };
